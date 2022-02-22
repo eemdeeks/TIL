@@ -1,3 +1,6 @@
+const messageList = document.querySelector("ul");
+const messageForm = document.querySelector("form");
+
 const socket = new WebSocket(`ws://${window.location.host}`);
 
 //서버와 연결된 경우(브라우져 들어가자마자 발생)
@@ -7,7 +10,7 @@ socket.addEventListener("open",()=>{
 
 //서버로부터 메세지를 받았을 경우
 socket.addEventListener("message", (message) => { 
-    console.log("just got this: ", message, "from the server");
+    console.log("New message: ", message.data);
 });
 
 //연결이 끊겼을 경우
@@ -16,7 +19,12 @@ socket.addEventListener("close", () =>{
 });
 
 
-//10초 뒤에 메시지 보내기
-setTimeout(() => {
-    socket.send("hello from the browser!");
-},10000);
+function handleSubmit(event){
+    event.preventDefault();
+    const input = messageForm.querySelector("input");
+    socket.send(input.value);
+    input.value = "";
+}
+
+
+messageForm.addEventListener("submit",handleSubmit);
