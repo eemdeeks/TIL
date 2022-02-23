@@ -1,7 +1,14 @@
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
+const messageForm = document.querySelector("#message");
+const nickForm = document.querySelector("#nick");
 
 const socket = new WebSocket(`ws://${window.location.host}`);
+
+
+function makeMessage(type, payload){
+    const msg = {type, payload};
+    return JSON.stringify(msg);
+}
 
 //서버와 연결된 경우(브라우져 들어가자마자 발생)
 socket.addEventListener("open",()=>{
@@ -10,7 +17,9 @@ socket.addEventListener("open",()=>{
 
 //서버로부터 메세지를 받았을 경우
 socket.addEventListener("message", (message) => { 
-    console.log("New message: ", message.data);
+    const li = document.createElement("li");
+    li.innerText = message.data;
+    messageList.append(li);
 });
 
 //연결이 끊겼을 경우
@@ -22,9 +31,22 @@ socket.addEventListener("close", () =>{
 function handleSubmit(event){
     event.preventDefault();
     const input = messageForm.querySelector("input");
-    socket.send(input.value);
+    socket.send(makeMessage("new_message", input.value));
+
+    const li = document.createElement("li");
+    li.innerText = `You: ${input.value}`;
+    messageList.append(li);
+
+
     input.value = "";
 }
 
+function handleNickSubmit(event){
+    event.preventDefault();
+    const input = nickForm.querySelector("input");
+    socket.send(makeMessage("nickname",input.value));
+    input.value = ""; //입력하고 입력창 비워주는 것.
+}
 
 messageForm.addEventListener("submit",handleSubmit);
+nickForm.addEventListener("submit",handleNickSubmit);
