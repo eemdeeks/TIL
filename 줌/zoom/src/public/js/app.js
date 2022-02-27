@@ -1,4 +1,27 @@
-const messageList = document.querySelector("ul");
+const socket = io();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//socket.io 프레임 워크 사용하지 않고 웹소켓 만으로 프론트앤드 만들기
+/* const messageList = document.querySelector("ul");
 const messageForm = document.querySelector("#message");
 const nickForm = document.querySelector("#nick");
 
@@ -49,4 +72,4 @@ function handleNickSubmit(event){
 }
 
 messageForm.addEventListener("submit",handleSubmit);
-nickForm.addEventListener("submit",handleNickSubmit);
+nickForm.addEventListener("submit",handleNickSubmit); */
